@@ -1,0 +1,40 @@
+version: 0.2.1 # adapterd version
+
+global:
+  as:
+    - fqdn: "as.local.cyphonic.org"
+    - port: 4501
+  nms:
+    - fqdn: "nms01.local.cyphonic.org"
+    - port: 4502
+  trs:
+    - fqdn: "trs01.local.cyphonic.org"
+    - port: 4503
+  controller:
+    - fqdn: "controller.local.cyphonic.org"
+    - port: 8081
+
+adapterd:
+  auth_type: 1 # Basic: 1 / Certificate: 2
+  adapter_id: "ca4698e4ba6b2ff74fcab04584221d8a1534613707493ab51d0084b2" ## adapter_id (device_id)
+  password: "cyphonic"
+  login_request_certificate_path: "./data/adapter_cert.pem"
+
+  dns_tun_address: "203.0.113.1"
+  dns_tun6_address: "2003::88"
+
+  internal_interface: "eth1"
+
+  child_device_information_path: "./data/information.json"
+
+  root_certificate_path: "./data/ca.pem"
+  tls_client_certificate_path: "./data/adapter_client_cert.pem"
+  tls_client_certificate_privatekey_path: "./data/adapter_client_private.key"
+
+logging:
+  output: true
+
+  encoding: "console" # or "json"
+
+  log_directory: "/var/log"
+  log_file_name: "adapterd.log"

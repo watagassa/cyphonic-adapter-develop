@@ -1,0 +1,11 @@
+direnv 2.32.1
+golang 1.25.5
+helm 3.9.4
+helmfile 0.145.2
+jq 1.6
+kubectl 1.25.3
+kustomize 4.5.7
+pre-commit 4.5.1
+ruby 3.1.2
+stern 1.21.0
+yq 4.29.2

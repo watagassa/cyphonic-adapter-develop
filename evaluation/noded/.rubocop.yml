@@ -1,0 +1,18 @@
+AllCops:
+  TargetRubyVersion: 3.2
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - "**/*.rb"
+    - "Vagrantfile"
+  Max: 50

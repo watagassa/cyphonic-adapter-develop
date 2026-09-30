@@ -1,0 +1,58 @@
+name: Go
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+    paths:
+      - "**.go"
+      - "**.mod"
+      - "**.sum"
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
+      - "feature/**"
+      - "hotfix/**"
+      - "evaluation/**"
+      - "chore/**"
+    paths:
+      - "**.go"
+      - "**.mod"
+      - "**.sum"
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.25
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25"
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v6
+
+      - name: Test code
+        run: |
+          cd adapterd
+          go test -v ./...
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.25
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25"
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v6
+
+      - name: Build
+        run: |
+          cd adapterd
+          go build -v ./cmd/adapterd

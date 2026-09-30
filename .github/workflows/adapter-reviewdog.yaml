@@ -1,0 +1,54 @@
+name: adapter-reviewdog
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - "!renovate/**"
+    paths:
+      - "**/*.go"
+      - ".golangci.yaml"
+      - ".github/workflows/adapter-reviewdog.yaml"
+
+  pull_request:
+    branches:
+      - main
+      - develop
+      - "feature/**"
+      - "hotfix/**"
+      - "evaluation/**"
+      - "chore/**"
+      - "!renovate/**"
+    paths:
+      - "**/*.go"
+      - ".golangci.yaml"
+      - ".github/workflows/adapter-reviewdog.yaml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  WORKDIR: "adapterd"
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'renovate[bot]' }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: golangci-lint + reviewdog
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: warning
+          filter_mode: diff_context
+          workdir: ${{ env.WORKDIR }}
+          golangci_lint_flags: "--timeout=5m"
+          fail_level: warning
+          go_version_file: "${{ env.WORKDIR }}/go.mod"

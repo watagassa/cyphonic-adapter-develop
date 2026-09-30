@@ -1,0 +1,77 @@
+{
+  "prettier.tabWidth": 2,
+  "emmet.triggerExpansionOnTab": true,
+  "editor.guides.indentation": true,
+  "npm.exclude": "",
+  "explorer.confirmDelete": false,
+  "vsicons.dontShowNewVersionMessage": true,
+  "editor.detectIndentation": false,
+
+  "go.useLanguageServer": true,
+  "go.toolsManagement.autoUpdate": true,
+
+  "[dockerfile]": {
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker",
+    "editor.formatOnSave": true
+  },
+
+  "[shellscript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "foxundermoon.shell-format",
+    "editor.formatOnSave": true
+  },
+
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.formatOnSave": true
+  },
+  "yaml.format.enable": true,
+  "redhat.telemetry.enabled": true,
+
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.format.insertSpaceAfterSemicolonInForStatements": false,
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.linkedEditing": true,
+    "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.linkedEditing": true,
+    "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.linkedEditing": true,
+    "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "json.schemas": []
+}

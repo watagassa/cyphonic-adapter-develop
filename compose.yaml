@@ -1,0 +1,127 @@
+name: cyphonic-adapter
+
+services:
+  adapterd:
+    build:
+      context: ./.docker/adapterd
+      dockerfile: Dockerfile
+    container_name: adapterd.local.cyphonic.org
+    env_file:
+      - ./.docker/.env
+    networks:
+      adapter-internal: # eth0
+        ipv4_address: 198.18.1.1
+        ipv6_address: 2001:0db8:c0ff:ee00:0118:0910:1:1
+      adapter-external: # eth1
+        ipv4_address: 192.168.11.40
+    ports:
+      - mode: ingress
+        target: 4501
+        protocol: tcp
+      - mode: ingress
+        target: 4502
+        protocol: udp
+      - mode: ingress
+        target: 4503
+        protocol: udp
+    privileged: true
+    restart: always
+    tty: true
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: "0"
+      net.ipv4.ip_forward: "0"
+    volumes:
+      - type: bind
+        source: ./adapterd
+        target: /go/src/github.com/Pluslab/cyphonic-adapter/adapterd
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./.docker/adapter/scripts
+        target: /go/src/github.com/Pluslab/cyphonic-adapter/.docker/adapterd/scripts
+        bind:
+          create_host_path: true
+    working_dir: /go/src/github.com/Pluslab/cyphonic-adapter/adapterd
+
+  general-node01:
+    build:
+      context: ./.docker/general-node
+      dockerfile: Dockerfile
+    container_name: general-node01.local.cyphonic.org
+    env_file:
+      - ./.docker/.env
+    networks:
+      adapter-internal:
+        ipv4_address: 198.18.1.5
+        ipv6_address: 2001:0db8:c0ff:ee00:0118:0910:1:5
+    privileged: true
+    restart: always
+    tty: true
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: "0"
+
+  general-node02:
+    build:
+      context: ./.docker/general-node
+      dockerfile: Dockerfile
+    container_name: general-node02.local.cyphonic.org
+    env_file:
+      - ./.docker/.env
+    networks:
+      adapter-internal:
+        ipv4_address: 198.18.1.6
+        ipv6_address: 2001:0db8:c0ff:ee00:0118:0910:1:6
+    privileged: true
+    restart: always
+    tty: true
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: "0"
+
+  general-node03:
+    build:
+      context: ./.docker/general-node
+      dockerfile: Dockerfile
+    container_name: general-node03.local.cyphonic.org
+    env_file:
+      - ./.docker/.env
+    networks:
+      adapter-internal:
+        ipv4_address: 198.18.1.7
+        ipv6_address: 2001:0db8:c0ff:ee00:0118:0910:1:7
+    privileged: true
+    restart: always
+    tty: true
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: "0"
+
+  general-node04:
+    build:
+      context: ./.docker/general-node
+      dockerfile: Dockerfile
+    container_name: general-node04.local.cyphonic.org
+    env_file:
+      - ./.docker/.env
+    networks:
+      adapter-internal:
+        ipv4_address: 198.18.1.8
+        ipv6_address: 2001:0db8:c0ff:ee00:0118:0910:1:8
+    privileged: true
+    restart: always
+    tty: true
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: "0"
+
+networks:
+  adapter-internal: ### adapterd: eth0 <---> general-node: eth0
+    name: adapter-internal
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 198.18.0.0/16
+        - subnet: 2001:db8:c0ff:ee00::/64
+    enable_ipv6: true
+
+  adapter-external: ## adapterd: eth1 <---> External networks
+    name: adapter-external
+    external: true
+    enable_ipv6: false

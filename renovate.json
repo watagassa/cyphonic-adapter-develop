@@ -1,0 +1,66 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Asia/Tokyo",
+  "baseBranchPatterns": [
+    "develop"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "gomod"
+      ],
+      "labels": [
+        "go"
+      ]
+    },
+    {
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "labels": [
+        "docker"
+      ]
+    },
+    {
+      "labels": [
+        "github_actions"
+      ],
+      "matchPackageNames": [
+        "/github-actions/"
+      ]
+    },
+    {
+      "matchManagers": [
+        "asdf"
+      ],
+      "labels": [
+        "asdf"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "addLabels": [
+        "major-update",
+        "renovate"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest",
+        "lockFileMaintenance"
+      ],
+      "addLabels": [
+        "minor-update",
+        "renovate"
+      ]
+    }
+  ]
+}

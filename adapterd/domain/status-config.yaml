@@ -1,0 +1,9 @@
+general:
+  - code: 0 # エラーコード
+    comment: "No error" # エラーコードの説明（※省略可能）
+
+errors:
+  - code: 1 # エラーコード
+    comment: "Adapter daemon was forced to shut down" # エラーコードの説明（※省略可能）
+  - code: 2
+    comment: "This device is not configured correctly"

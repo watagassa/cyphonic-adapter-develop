@@ -1,0 +1,72 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+  go: "1.23"
+
+linters:
+  default: none
+  enable:
+    - revive
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - unused
+    - dupl
+    - lll
+    - funlen
+    - misspell
+    - errorlint
+    - goconst
+    - nilerr
+    - unconvert
+    - unparam
+    - whitespace
+    - wsl_v5
+
+  settings:
+    govet:
+      enable:
+        - shadow
+    revive:
+      rules:
+        - name: exported
+        - name: var-naming
+        - name: receiver-naming
+        - name: indent-error-flow
+    misspell:
+      locale: US
+    funlen:
+      lines: 80
+      statements: 50
+    lll:
+      line-length: 230
+    errcheck:
+      check-type-assertions: false
+      check-blank: false
+
+  exclusions:
+    rules:
+      - path: ^internal/
+        linters:
+          - wsl_v5
+        text: "invalid statement above (expr|if)"
+      - path: ^internal/
+        linters:
+          - dupl
+      - path: ^config/
+        linters:
+          - staticcheck
+      - path: ^config/
+        linters:
+          - revive
+        text: "^exported:"
+
+formatters:
+  enable:
+    - gofumpt
+
+issues:
+  max-same-issues: 0

@@ -1,0 +1,13 @@
+127.0.0.1	localhost
+::1		localhost ip6-localhost ip6-loopback
+ff02::1		ip6-allnodes
+ff02::2		ip6-allrouters
+
+127.0.1.1		cyp-as
+
+10.0.100.5              as.local.cyphonic.org
+10.0.100.6              nms01.local.cyphonic.org
+10.0.100.7              trs01.local.cyphonic.org
+fde4:db8::101           as.local.cyphonic.org
+fde4:db8::102           nms01.local.cyphonic.org
+fde4:db8::103           trs01.local.cyphonic.org

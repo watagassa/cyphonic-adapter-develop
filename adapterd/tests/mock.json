@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "device_name": "general-node01",
+    "device_id": "61df7869c6ea4fca675a6272d25e80cb841d0c4ce1b2b2b7e0815bb2",
+    "password": "99425113951d8c9e0138571f8ca74ec42d0e91a501a57887ff39c476b57463abde67b26eb90426d06c197193677b8da5f123ac88fce3c75f03915818d0732a04",
+    "auth_type": 1,
+    "mac_address": "dc:a6:32:b2:83:10",
+    "enable_ipv6": false,
+    "created_at": "2023-03-01T05:45:54+09:00",
+    "updated_at": "2023-03-01T05:45:54+09:00"
+  },
+  {
+    "id": 2,
+    "device_name": "general-node02",
+    "device_id": "395c73de6723d246159f3c41160363da996038a34145a4ee8752a0aa",
+    "password": "99425113951d8c9e0138571f8ca74ec42d0e91a501a57887ff39c476b57463abde67b26eb90426d06c197193677b8da5f123ac88fce3c75f03915818d0732a04",
+    "auth_type": 1,
+    "mac_address": "dc:a6:32:bf:8b:a7",
+    "enable_ipv6": false,
+    "created_at": "2023-03-01T05:45:54+09:00",
+    "updated_at": "2023-03-17T10:32:32+09:00"
+  },
+  {
+    "id": 3,
+    "device_name": "general-node03",
+    "device_id": "3ef68dac78ec4bce91d2cc31219e4f7b3911148453d1f14f7fc9f701",
+    "password": "99425113951d8c9e0138571f8ca74ec42d0e91a501a57887ff39c476b57463abde67b26eb90426d06c197193677b8da5f123ac88fce3c75f03915818d0732a04",
+    "auth_type": 1,
+    "mac_address": "dc:a6:32:bf:8b:5c",
+    "enable_ipv6": false,
+    "created_at": "2023-03-01T05:45:54+09:00",
+    "updated_at": "2023-03-01T05:45:54+09:00"
+  },
+  {
+    "id": 4,
+    "device_name": "general-node04",
+    "device_id": "4f0b1fb5663eb66f0a5155606f91e37f6333263716df86f451a273c0",
+    "password": "99425113951d8c9e0138571f8ca74ec42d0e91a501a57887ff39c476b57463abde67b26eb90426d06c197193677b8da5f123ac88fce3c75f03915818d0732a04",
+    "auth_type": 1,
+    "mac_address": "dc:a6:32:bf:8b:aa",
+    "enable_ipv6": false,
+    "created_at": "2023-03-01T05:45:54+09:00",
+    "updated_at": "2023-03-01T05:45:54+09:00"
+  },
+  {
+    "id": 5,
+    "device_name": "general-node05",
+    "device_id": "ca4698e4ba6b2ff74fcab04584221d8a1534613707493ab51d0084b2",
+    "password": "99425113951d8c9e0138571f8ca74ec42d0e91a501a57887ff39c476b57463abde67b26eb90426d06c197193677b8da5f123ac88fce3c75f03915818d0732a04",
+    "auth_type": 1,
+    "mac_address": "dc:a6:32:bf:8b:77",
+    "enable_ipv6": false,
+    "created_at": "2023-03-01T05:45:54+09:00",
+    "updated_at": "2023-03-01T05:45:54+09:00"
+  }
+]
