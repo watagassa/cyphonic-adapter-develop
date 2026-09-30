@@ -10,6 +10,7 @@ require (
 	github.com/miekg/dns v1.1.72
 	github.com/redis/go-redis/v9 v9.17.3
 	github.com/spf13/cobra v1.10.2
+	github.com/vishvananda/netlink v1.3.1
 	github.com/vjeantet/ldapserver v1.0.2-0.20260725103726-663e6b9910fb
 	go.uber.org/zap v1.27.1
 	golang.org/x/net v0.55.0
@@ -24,6 +25,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/u-root/uio v0.0.0-20240224005618-d2acac8f3701 // indirect
+	github.com/vishvananda/netns v0.0.5 // indirect
 	github.com/vjeantet/goldap v0.0.0-20260720153039-a51461838017 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/mod v0.31.0 // indirect
