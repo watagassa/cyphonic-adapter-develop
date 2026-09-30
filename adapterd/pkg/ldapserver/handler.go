@@ -8,7 +8,12 @@ import (
 	ldap "github.com/vjeantet/ldapserver"
 )
 
-const defaultBaseDN = "dc=example,dc=org"
+const (
+	defaultBaseDN = "dc=example,dc=org"
+
+	// ldapResultCanceled is the "canceled" result code (RFC 3909), which ldapserver v1.0.1 does not define.
+	ldapResultCanceled = 118
+)
 
 var serialRegex = regexp.MustCompile(`(?i)serialNumber=(%\{[^}]+\}|[^\(\)\s=]+)`)
 
@@ -30,7 +35,11 @@ func handleSimpleBind(w ldap.ResponseWriter, m *ldap.Message) {
 	switch bindDN {
 	case "", "cn=admin," + defaultBaseDN, "myLogin", "uid=myLogin," + defaultBaseDN:
 		logger.Info(fmt.Sprintf("[Simple Bind] Success for DN: %s", bindDN))
-		m.Client.SetData(bindDN)
+
+		if lc, ok := m.Client.GetConn().(*loggingConn); ok {
+			lc.setBoundDN(bindDN)
+		}
+
 		w.Write(res)
 
 		return
@@ -47,15 +56,19 @@ func handleSearch(w ldap.ResponseWriter, m *ldap.Message) {
 	filter := r.FilterString()
 	baseDN := string(r.BaseObject())
 
-	boundDN, _ := m.Client.GetData().(string)
+	boundDN := ""
+	if lc, ok := m.Client.GetConn().(*loggingConn); ok {
+		boundDN = lc.getBoundDN()
+	}
+
 	logger.Info(fmt.Sprintf("[Search] Request received from '%s' - BaseDN: %s, Filter: %s", boundDN, baseDN, filter))
 
 	serialID := extractSerialID(m, filter)
 
 	select {
 	case <-m.Done:
-		logger.Info(fmt.Sprintf("[Search] Operation canceled for message ID: %d", m.MessageID()))
-		w.Write(ldap.NewSearchResultDoneResponse(ldap.LDAPResultCanceled))
+		logger.Info(fmt.Sprintf("[Search] Operation canceled for message ID: %d", m.MessageID().Int()))
+		w.Write(ldap.NewSearchResultDoneResponse(ldapResultCanceled))
 
 		return
 	default:

@@ -4,7 +4,6 @@ package ldapserver
 
 import (
 	"crypto/tls"
-	"errors"
 	"fmt"
 	"net"
 	"time"
@@ -34,8 +33,9 @@ type Config struct {
 
 // Server is an LDAPS server that requires client certificates.
 type Server struct {
-	cfg    Config
-	server *ldap.Server
+	cfg      Config
+	server   *ldap.Server
+	listener *handshakingListener
 }
 
 // New creates a Server from cfg. Zero values in cfg are replaced with defaults.
@@ -60,45 +60,51 @@ func New(cfg Config) *Server {
 }
 
 // Start loads the TLS settings, starts listening and serves requests in a new goroutine.
-// Serve errors after startup are sent to the returned channel.
-func (s *Server) Start() (<-chan error, error) {
+// It returns after the listener is ready, or with an error if listening failed.
+func (s *Server) Start() error {
 	tlsConfig, err := loadTLSConfig(s.cfg.CertFile, s.cfg.KeyFile, s.cfg.CAFile)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	logger.Info("[TLS] Mutual TLS (mTLS) verification STRICTLY enabled.")
 
-	tcpLn, err := net.Listen("tcp", s.cfg.ListenAddr)
-	if err != nil {
-		return nil, fmt.Errorf("failed to listen on %s: %w", s.cfg.ListenAddr, err)
-	}
-
 	ldap.Logger = zap.NewStdLog(zap.L())
 	s.server = newLDAPServer(s.cfg)
 
-	// 標準の tls.Listener を handshakingListener でラップ
-	ln := &handshakingListener{
-		Listener:         tls.NewListener(tcpLn, tlsConfig),
-		handshakeTimeout: s.cfg.HandshakeTimeout,
-	}
-
+	ready := make(chan struct{})
 	errCh := make(chan error, 1)
 
-	go func() {
-		defer close(errCh)
+	// ldapserver v1.0.1 には既存リスナーを渡す Serve がないため、
+	// ListenAndServe のオプションで TCP リスナーを TLS + handshakingListener に差し替える
+	wrapListener := func(srv *ldap.Server) {
+		s.listener = newHandshakingListener(tls.NewListener(srv.Listener, tlsConfig), s.cfg.HandshakeTimeout)
+		srv.Listener = s.listener
 
 		logger.Info(fmt.Sprintf("LDAPS Server listening on tls://%s", s.cfg.ListenAddr))
+		close(ready)
+	}
 
-		if err := s.server.Serve(ln); err != nil && !errors.Is(err, net.ErrClosed) {
-			errCh <- fmt.Errorf("LDAPS server serve error: %w", err)
+	go func() {
+		if err := s.server.ListenAndServe(s.cfg.ListenAddr, wrapListener); err != nil {
+			errCh <- err
 		}
 	}()
 
-	return errCh, nil
+	select {
+	case <-ready:
+		return nil
+	case err := <-errCh:
+		s.server = nil
+
+		return fmt.Errorf("failed to listen on %s: %w", s.cfg.ListenAddr, err)
+	}
 }
 
-// Stop gracefully stops the server.
+// Stop gracefully closes client connections and the listener.
+//
+// ldapserver v1.0.1 panics when Accept returns an error, so after Stop the serve
+// goroutine stays blocked in Accept instead of exiting.
 func (s *Server) Stop() {
 	if s.server == nil {
 		return
@@ -106,6 +112,12 @@ func (s *Server) Stop() {
 
 	logger.Info("Shutting down LDAPS Server...")
 	s.server.Stop()
+
+	if err := s.listener.Close(); err != nil {
+		logger.Warn(fmt.Sprintf("failed to close LDAPS listener: %v", err))
+	}
+
+	s.server = nil
 }
 
 func newLDAPServer(cfg Config) *ldap.Server {
@@ -113,22 +125,13 @@ func newLDAPServer(cfg Config) *ldap.Server {
 	server.ReadTimeout = cfg.ReadTimeout
 	server.WriteTimeout = cfg.WriteTimeout
 
+	server.Handle(newRouteMux())
+
 	server.OnNewConnection = func(c net.Conn) error {
 		logger.Info(fmt.Sprintf("[Connection] New TCP connection established from: %s", c.RemoteAddr()))
 
 		return nil
 	}
-
-	server.OnClientClose = func(conn net.Conn, data any) {
-		boundDN, _ := data.(string)
-		if boundDN == "" {
-			boundDN = "Anonymous"
-		}
-
-		logger.Info(fmt.Sprintf("[Connection] Session closed for %s (Bound DN: %s)", conn.RemoteAddr(), boundDN))
-	}
-
-	server.Handle(newRouteMux())
 
 	return server
 }
