@@ -40,6 +40,17 @@ type AdapterdConfig struct {
 	VirtualIPType                      string `yaml:"virtual_ip_type"`
 }
 
+type LdapConfig struct {
+	Enabled                         bool   `yaml:"enabled"`
+	ListenAddress                   string `yaml:"listen_address"`
+	ServerCertificatePath           string `yaml:"server_certificate_path"`
+	ServerCertificatePrivateKeyPath string `yaml:"server_certificate_privatekey_path"`
+	ClientCACertificatePath         string `yaml:"client_ca_certificate_path"`
+	ReadTimeout                     int    `yaml:"read_timeout"`
+	WriteTimeout                    int    `yaml:"write_timeout"`
+	HandshakeTimeout                int    `yaml:"handshake_timeout"`
+}
+
 type LoggingConfig struct {
 	Output   bool   `yaml:"output"`
 	Encoding string `yaml:"encoding"`
@@ -57,6 +68,7 @@ type RedisConfig struct {
 type YamlConfig struct {
 	GlobalConfig   `yaml:"global"`
 	AdapterdConfig `yaml:"adapterd"`
+	LdapConfig     `yaml:"ldap"`
 	LoggingConfig  `yaml:"logging"`
 	RedisConfig    `yaml:"redis"`
 }

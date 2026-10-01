@@ -33,6 +33,18 @@ adapterd:
 
   virtual_ip_type: "4"
 
+ldap:
+  enabled: false # LDAPS server (not started by adapterd yet)
+  listen_address: "127.0.0.1:636"
+
+  server_certificate_path: "./data/ldap.local.cyphonic.org.pem"
+  server_certificate_privatekey_path: "./data/ldap.local.cyphonic.org.key"
+  client_ca_certificate_path: "./data/radius_chain_ca.pem" # CA used to verify client certificates (mTLS)
+
+  read_timeout: 30 # seconds
+  write_timeout: 30 # seconds
+  handshake_timeout: 10 # seconds
+
 redis:
   host: "localhost"
   port: 6379

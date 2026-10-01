@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"net/netip"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -33,6 +34,17 @@ type Adapterd struct {
 	VirtualIPType                      string
 }
 
+type Ldap struct {
+	Enabled                         bool
+	ListenAddress                   string
+	ServerCertificatePath           string
+	ServerCertificatePrivateKeyPath string
+	ClientCACertificatePath         string
+	ReadTimeout                     time.Duration
+	WriteTimeout                    time.Duration
+	HandshakeTimeout                time.Duration
+}
+
 type Redis struct {
 	Host     string
 	Port     int
@@ -59,6 +71,7 @@ type LogRotateSetting struct {
 type Config struct {
 	Global   *Global
 	Adapterd *Adapterd
+	Ldap     *Ldap
 	Logging  *Logging
 	Redis    *Redis
 }
@@ -102,6 +115,17 @@ func Get() (*Config, error) {
 		VirtualIPType:                      config.AdapterdConfig.VirtualIPType,
 	}
 
+	ldap := &Ldap{
+		Enabled:                         config.LdapConfig.Enabled,
+		ListenAddress:                   config.LdapConfig.ListenAddress,
+		ServerCertificatePath:           config.LdapConfig.ServerCertificatePath,
+		ServerCertificatePrivateKeyPath: config.LdapConfig.ServerCertificatePrivateKeyPath,
+		ClientCACertificatePath:         config.LdapConfig.ClientCACertificatePath,
+		ReadTimeout:                     time.Duration(config.LdapConfig.ReadTimeout) * time.Second,
+		WriteTimeout:                    time.Duration(config.LdapConfig.WriteTimeout) * time.Second,
+		HandshakeTimeout:                time.Duration(config.LdapConfig.HandshakeTimeout) * time.Second,
+	}
+
 	logging := &Logging{
 		Output:   config.LoggingConfig.Output,
 		Encoding: config.LoggingConfig.Encoding,
@@ -119,6 +143,7 @@ func Get() (*Config, error) {
 	return &Config{
 		Global:   global,
 		Adapterd: adapterd,
+		Ldap:     ldap,
 		Logging:  logging,
 		Redis:    redis,
 	}, nil

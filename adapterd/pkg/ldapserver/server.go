@@ -9,6 +9,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/Pluslab/cyphonic-adapter/adapterd/config"
 	"github.com/Pluslab/cyphonic-adapter/adapterd/pkg/logger"
 	ldap "github.com/vjeantet/ldapserver"
 	"go.uber.org/zap"
@@ -30,6 +31,19 @@ type Config struct {
 	ReadTimeout      time.Duration
 	WriteTimeout     time.Duration
 	HandshakeTimeout time.Duration
+}
+
+// ConfigFromAdapterd converts the ldap section of the adapterd config file into a Config.
+func ConfigFromAdapterd(c *config.Ldap) Config {
+	return Config{
+		ListenAddr:       c.ListenAddress,
+		CertFile:         c.ServerCertificatePath,
+		KeyFile:          c.ServerCertificatePrivateKeyPath,
+		CAFile:           c.ClientCACertificatePath,
+		ReadTimeout:      c.ReadTimeout,
+		WriteTimeout:     c.WriteTimeout,
+		HandshakeTimeout: c.HandshakeTimeout,
+	}
 }
 
 // Server is an LDAPS server that requires client certificates.
